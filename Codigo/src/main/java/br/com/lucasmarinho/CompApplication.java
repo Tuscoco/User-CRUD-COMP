@@ -1,13 +1,13 @@
-package com.example.Comp;
+package br.com.lucasmarinho;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CompUserCrudApplication {
+public class CompApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CompUserCrudApplication.class, args);
+		SpringApplication.run(CompApplication.class, args);
 	}
 
 }
