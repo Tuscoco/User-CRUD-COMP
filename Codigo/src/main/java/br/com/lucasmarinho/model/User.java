@@ -1,20 +1,17 @@
 package br.com.lucasmarinho.model;
 
-import java.util.UUID;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    private UUID id;
+    private int id;
 
-    @Column(name = "user", unique = true)
+    @Column(name = "username", unique = true)
     private String user;
 
     @Column(name = "name")
