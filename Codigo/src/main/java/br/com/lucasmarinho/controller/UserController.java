@@ -1,10 +1,14 @@
 package br.com.lucasmarinho.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.lucasmarinho.model.User;
@@ -16,22 +20,43 @@ public class UserController {
     
     private UserService service;
 
-    @Autowired
     public UserController(UserService service){
         this.service = service;
     }
 
-    @GetMapping("/")
-    public User read(@RequestParam int id){
+    @PostMapping("/")
+    public void create(@RequestBody User user){
 
-        User user = service.read(id);
-
-        System.out.println(user);
-
-        return user;
+        service.create(user);
 
     }
 
-    public void create(){}
+    @GetMapping("/{id}")
+    public User read(@PathVariable("id") int id){
+
+        return service.read(id);
+
+    }
+
+    @GetMapping("/all")
+    public List<User> readAll(){
+
+        return service.readAll();
+
+    }
+
+    @PutMapping("/{id}")
+    public void update(@PathVariable("id") int id, @RequestBody User user){
+
+        service.update(id, user);
+
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") int id){
+
+        service.delete(id);
+
+    }
 
 }
