@@ -2,6 +2,7 @@ package br.com.lucasmarinho.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +26,17 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public void create(@RequestBody User user){
+    public ResponseEntity<String> create(@RequestBody User user){
 
-        service.create(user);
+        boolean success = service.create(user);
+
+        if(success){
+
+            return ResponseEntity.ok().body("Usuário criado com sucesso!");
+
+        }
+
+        return ResponseEntity.badRequest().body("Erro ao criar usuário!\nUsername existente!");
 
     }
 
@@ -46,16 +55,32 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable("id") int id, @RequestBody User user){
+    public ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody User user){
 
-        service.update(id, user);
+        boolean success = service.update(id, user);
+
+        if(success){
+
+            return ResponseEntity.ok().body("Usuário atualizado com sucesso!");
+
+        }
+
+        return ResponseEntity.badRequest().body("Erro ao atualizar usuário!\nUsuário não encontrado!");
 
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") int id){
+    public ResponseEntity<String> delete(@PathVariable("id") int id){
 
-        service.delete(id);
+        boolean success = service.delete(id);
+
+        if(success){
+
+            return ResponseEntity.ok().body("Usuário deletado com sucesso!");
+
+        }
+
+        return ResponseEntity.badRequest().body("Erro ao deletar usuário!\nUsuário não encontrado!");
 
     }
 

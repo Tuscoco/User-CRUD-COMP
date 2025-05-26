@@ -12,13 +12,25 @@ public class UserService {
     
     private UserRepository repository;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository){
+
         this.repository = repository;
+        
     }
 
-    public void create(User user){
+    public boolean create(User user){
 
-        repository.save(user);
+        User verificarExistencia = repository.findByUser(user.getUser());
+
+        if(verificarExistencia == null){
+
+            repository.save(user);
+
+            return true;
+
+        }
+
+        return false;
 
     }
 
@@ -34,11 +46,39 @@ public class UserService {
 
     }
 
-    public void update(int id, User user){}
+    public boolean update(int id, User userAtualizado){
 
-    public void delete(int id){
+        User user = repository.findById(id);
+
+        if(user == null){
+
+            return false;
+
+        }
+
+        user.setName(userAtualizado.getName());
+        user.setUser(userAtualizado.getUser());
+        user.setPassword(userAtualizado.getPassword());
+
+        repository.save(user);
+
+        return true;
+
+    }
+
+    public boolean delete(int id){
+
+        User user = repository.findById(id);
+
+        if(user != null){
+
+            return false;
+
+        }
 
         repository.deleteById(id);
+
+        return true;
 
     }
 
