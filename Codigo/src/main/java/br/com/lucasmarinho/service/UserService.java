@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.lucasmarinho.model.User;
 import br.com.lucasmarinho.repository.UserRepository;
 
@@ -22,15 +23,19 @@ public class UserService {
 
         User verificarExistencia = repository.findByUser(user.getUser());
 
-        if(verificarExistencia == null){
+        if(verificarExistencia != null){
 
-            repository.save(user);
-
-            return true;
+            return false;
 
         }
 
-        return false;
+        String senhaCriptografada = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray());
+
+        user.setPassword(senhaCriptografada);
+
+        repository.save(user);
+
+        return true;
 
     }
 
@@ -58,7 +63,10 @@ public class UserService {
 
         user.setName(userAtualizado.getName());
         user.setUser(userAtualizado.getUser());
-        user.setPassword(userAtualizado.getPassword());
+
+        String senhaCriptografada = BCrypt.withDefaults().hashToString(12, userAtualizado.getPassword().toCharArray());
+
+        user.setPassword(senhaCriptografada);
 
         repository.save(user);
 
