@@ -45,6 +45,12 @@ public class UserService {
 
     }
 
+    public User read(String username){
+
+        return repository.findByUser(username);
+
+    }
+
     public List<User> readAll(){
 
         return repository.findAll();

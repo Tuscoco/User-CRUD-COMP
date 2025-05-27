@@ -47,6 +47,13 @@ public class UserController {
 
     }
 
+    @GetMapping("/username/{user}")
+    public User read(@PathVariable("user") String username){
+
+        return service.read(username);
+
+    }
+
     @GetMapping("/all")
     public List<User> readAll(){
 
