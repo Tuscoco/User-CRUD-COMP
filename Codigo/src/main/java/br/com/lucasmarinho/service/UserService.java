@@ -19,9 +19,9 @@ public class UserService {
         
     }
 
-    public boolean create(User user){
+    public boolean criarUsuario(User user){
 
-        User verificarExistencia = repository.findByUser(user.getUser());
+        User verificarExistencia = repository.findByUsername(user.getUsername());
 
         if(verificarExistencia != null){
 
@@ -39,25 +39,25 @@ public class UserService {
 
     }
 
-    public User read(int id){
+    public User lerUsuario(int id){
 
         return repository.findById(id);
 
     }
 
-    public User read(String username){
+    public User lerUsuario(String username){
 
-        return repository.findByUser(username);
+        return repository.findByUsername(username);
 
     }
 
-    public List<User> readAll(){
+    public List<User> lerTodosUsuarios(){
 
         return repository.findAll();
 
     }
 
-    public boolean update(int id, User userAtualizado){
+    public boolean atualizarUsuario(int id, User userAtualizado){
 
         User user = repository.findById(id);
 
@@ -68,7 +68,7 @@ public class UserService {
         }
 
         user.setName(userAtualizado.getName());
-        user.setUser(userAtualizado.getUser());
+        user.setUsername(userAtualizado.getUsername());
 
         String senhaCriptografada = BCrypt.withDefaults().hashToString(12, userAtualizado.getPassword().toCharArray());
 
@@ -80,11 +80,11 @@ public class UserService {
 
     }
 
-    public boolean delete(int id){
+    public boolean deletarUsuario(int id){
 
         User user = repository.findById(id);
 
-        if(user != null){
+        if(user == null){
 
             return false;
 

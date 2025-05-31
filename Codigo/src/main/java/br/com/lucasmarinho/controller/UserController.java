@@ -26,9 +26,9 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> create(@RequestBody User user){
+    public ResponseEntity<String> criarUsuario(@RequestBody User user){
 
-        boolean success = service.create(user);
+        boolean success = service.criarUsuario(user);
 
         if(success){
 
@@ -41,30 +41,30 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User read(@PathVariable("id") int id){
+    public User lerUsuario(@PathVariable("id") int id){
 
-        return service.read(id);
+        return service.lerUsuario(id);
 
     }
 
     @GetMapping("/username/{user}")
-    public User read(@PathVariable("user") String username){
+    public User lerUsuario(@PathVariable("user") String username){
 
-        return service.read(username);
+        return service.lerUsuario(username);
 
     }
 
     @GetMapping("/all")
-    public List<User> readAll(){
+    public List<User> lerTodosUsuarios(){
 
-        return service.readAll();
+        return service.lerTodosUsuarios();
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody User user){
+    public ResponseEntity<String> atualizarUsuario(@PathVariable("id") int id, @RequestBody User user){
 
-        boolean success = service.update(id, user);
+        boolean success = service.atualizarUsuario(id, user);
 
         if(success){
 
@@ -77,9 +77,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") int id){
+    public ResponseEntity<String> deletarUsuario(@PathVariable("id") int id){
 
-        boolean success = service.delete(id);
+        boolean success = service.deletarUsuario(id);
 
         if(success){
 
