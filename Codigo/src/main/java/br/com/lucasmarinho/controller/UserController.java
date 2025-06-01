@@ -41,16 +41,32 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User lerUsuario(@PathVariable("id") int id){
+    public ResponseEntity<User> lerUsuario(@PathVariable("id") int id){
 
-        return service.lerUsuario(id);
+        User user = service.lerUsuario(id);
+
+        if(user != null){
+
+            return ResponseEntity.ok().body(user);
+
+        }
+
+        return ResponseEntity.badRequest().body(null);
 
     }
 
     @GetMapping("/username/{user}")
-    public User lerUsuario(@PathVariable("user") String username){
+    public ResponseEntity<User> lerUsuario(@PathVariable("user") String username){
 
-        return service.lerUsuario(username);
+        User user = service.lerUsuario(username);
+
+        if(user != null){
+
+            return ResponseEntity.ok().body(user);
+
+        }
+
+        return ResponseEntity.badRequest().body(null);
 
     }
 
