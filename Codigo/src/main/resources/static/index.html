@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Usuários</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #444;
+        }
+
+        .crud-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .crud-btn {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            background-color: #f8f8f8;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .crud-btn:hover {
+            background-color: #e8e8e8;
+        }
+
+        .crud-btn.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .operation-section {
+            display: none;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .operation-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            background-color: #f8f8f8;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background-color: #e8e8e8;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .result-area {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 3px;
+            min-height: 100px;
+        }
+
+        .user-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema CRUD de Usuários</h1>
+        
+        <div class="crud-buttons">
+            <button class="crud-btn active" onclick="showOperation('create')">Create</button>
+            <button class="crud-btn" onclick="showOperation('read')">Read</button>
+            <button class="crud-btn" onclick="showOperation('update')">Update</button>
+            <button class="crud-btn" onclick="showOperation('delete')">Delete</button>
+        </div>
+
+        <!-- CREATE SECTION -->
+        <div id="create-section" class="operation-section active">
+            <h2>Criar Usuário</h2>
+            <div class="form-group">
+                <label for="create-username">Username:</label>
+                <input type="text" id="create-username" placeholder="Digite o username">
+            </div>
+            <div class="form-group">
+                <label for="create-name">Nome:</label>
+                <input type="text" id="create-name" placeholder="Digite o nome completo">
+            </div>
+            <div class="form-group">
+                <label for="create-password">Senha:</label>
+                <input type="password" id="create-password" placeholder="Digite a senha">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="createUser()">Criar Usuário</button>
+                <button class="btn" onclick="clearCreateForm()">Limpar</button>
+            </div>
+            <div id="create-result" class="result-area"></div>
+        </div>
+
+        <!-- READ SECTION -->
+        <div id="read-section" class="operation-section">
+            <h2>Consultar Usuários</h2>
+            <div class="form-group">
+                <label for="read-id">Pesquisar por ID:</label>
+                <input type="text" id="read-id" placeholder="Digite o ID do usuário">
+                <button class="btn btn-primary" onclick="readUserById()" style="margin-top: 5px;">Buscar por ID</button>
+            </div>
+            <div class="form-group">
+                <label for="read-name">Pesquisar por Nome:</label>
+                <input type="text" id="read-name" placeholder="Digite o nome do usuário">
+                <button class="btn btn-primary" onclick="readUserByName()" style="margin-top: 5px;">Buscar por Nome</button>
+            </div>
+            <div class="form-group">
+                <button class="btn" onclick="readAllUsers()">Mostrar Todos os Usuários</button>
+            </div>
+            <div id="read-result" class="result-area"></div>
+        </div>
+
+        <!-- UPDATE SECTION -->
+        <div id="update-section" class="operation-section">
+            <h2>Atualizar Usuário</h2>
+            <div class="form-group">
+                <label for="update-id">ID do Usuário:</label>
+                <input type="text" id="update-id" placeholder="Digite o ID do usuário para atualizar">
+                <button class="btn" onclick="loadUserForUpdate()" style="margin-top: 5px;">Carregar Dados</button>
+            </div>
+            <div class="form-group">
+                <label for="update-username">Username:</label>
+                <input type="text" id="update-username" placeholder="Digite o novo username">
+            </div>
+            <div class="form-group">
+                <label for="update-name">Nome:</label>
+                <input type="text" id="update-name" placeholder="Digite o novo nome">
+            </div>
+            <div class="form-group">
+                <label for="update-password">Senha:</label>
+                <input type="password" id="update-password" placeholder="Digite a nova senha">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="updateUser()">Atualizar Usuário</button>
+                <button class="btn" onclick="clearUpdateForm()">Limpar</button>
+            </div>
+            <div id="update-result" class="result-area"></div>
+        </div>
+
+        <!-- DELETE SECTION -->
+        <div id="delete-section" class="operation-section">
+            <h2>Excluir Usuário</h2>
+            <div class="form-group">
+                <label for="delete-id">ID do Usuário:</label>
+                <input type="text" id="delete-id" placeholder="Digite o ID do usuário para excluir">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-danger" onclick="deleteUser()">Excluir Usuário</button>
+                <button class="btn" onclick="clearDeleteForm()">Limpar</button>
+            </div>
+            <div id="delete-result" class="result-area"></div>
+        </div>
+    </div>
+
+    <script>
+
+        // Função para alternar entre operações
+        function showOperation(operation) {
+            // Remove active de todos os botões
+            document.querySelectorAll('.crud-btn').forEach(btn => btn.classList.remove('active'));
+            // Remove active de todas as seções
+            document.querySelectorAll('.operation-section').forEach(section => section.classList.remove('active'));
+            
+            // Adiciona active ao botão clicado
+            event.target.classList.add('active');
+            // Mostra a seção correspondente
+            document.getElementById(operation + '-section').classList.add('active');
+        }
+
+        // CREATE - Criar usuário
+        function createUser() {
+            const username = document.getElementById('create-username').value.trim();
+            const name = document.getElementById('create-name').value.trim();
+            const password = document.getElementById('create-password').value.trim();
+            const resultArea = document.getElementById('create-result');
+
+            if (!username || !name || !password) {
+                showMessage(resultArea, 'Todos os campos são obrigatórios!', 'error');
+                return;
+            }
+
+            const newUser = {
+                username: username,
+                name: name,
+                password: password
+            };
+
+            fetch('http://localhost:8080/user/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(newUser)
+            })
+                .then(response => response.json())
+                .then(data => showMessage(resultArea, `Usuário criado com sucesso!`))
+                .catch(error => console.error('Erro:', error));
+            clearCreateForm();
+        }
+
+        function clearCreateForm() {
+            document.getElementById('create-username').value = '';
+            document.getElementById('create-name').value = '';
+            document.getElementById('create-password').value = '';
+            document.getElementById('create-result').innerHTML = '';
+        }
+
+        // READ - Ler usuários
+        function readUserById(){
+
+            const id = parseInt(document.getElementById('read-id').value.trim());
+            const resultArea = document.getElementById('read-result');
+
+            fetch(`http://localhost:8080/user/${id}`)
+            .then(response => response.json())
+            .then(user => {
+                displayUsers(user, resultArea);
+            })
+            .catch(error => console.error('Erro:', error));
+            
+        }
+
+        function readUserByName() {
+            const username = document.getElementById('read-name').value.trim().toLowerCase();
+            const resultArea = document.getElementById('read-result');
+
+            if (!username) {
+                showMessage(resultArea, 'Digite um nome para pesquisar!', 'error');
+                return;
+            }
+
+            fetch(`http://localhost:8080/user/username/${username}`)
+            .then(response => response.json())
+            .then(user => {
+                displayUsers(user, resultArea);
+            })
+            .catch(error => console.error('Erro:', error));
+
+        }
+
+        function readAllUsers() {
+            const resultArea = document.getElementById('read-result');
+
+            fetch('http://localhost:8080/user/all')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar usuários');
+                }
+                return response.json();
+            })
+            .then(users => {
+                if (users.length === 0) {
+                    showMessage(resultArea, 'Nenhum usuário cadastrado!', 'error');
+                } else {
+                    displayUsers(users, resultArea);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showMessage(resultArea, 'Erro ao buscar usuários.', 'error');
+            });
+        }
+
+        function displayUsers(userList, resultArea) {
+            let html = '<h3>Usuário(s) encontrado(s):</h3>';
+
+            // Se não for array, transforma em array
+            if (!Array.isArray(userList)) {
+                userList = [userList];
+            }
+
+            userList.forEach(user => {
+                html += `
+                    <div class="user-item">
+                        <strong>ID:</strong> ${user.id}<br>
+                        <strong>Username:</strong> ${user.username}<br>
+                        <strong>Nome:</strong> ${user.name}<br>
+                        <strong>Senha:</strong> ${'*'.repeat(user.password.length)}
+                    </div>
+                `;
+            });
+
+            resultArea.innerHTML = html;
+        }
+
+        // UPDATE - Atualizar usuário
+        function loadUserForUpdate() {
+            const id = parseInt(document.getElementById('update-id').value.trim());
+            const resultArea = document.getElementById('update-result');
+
+            if (!id) {
+                showMessage(resultArea, 'Digite um ID válido!', 'error');
+                return;
+            }
+
+            fetch(`http://localhost:8080/user/${id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Usuário não encontrado!');
+                }
+                return response.json();
+            })
+            .then(user => {
+                document.getElementById('update-username').value = user.username;
+                document.getElementById('update-name').value = user.name;
+                document.getElementById('update-password').value = user.password;
+                showMessage(resultArea, 'Dados do usuário carregados!', 'success');
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showMessage(resultArea, 'Usuário não encontrado!', 'error');
+            });
+        }
+
+        function updateUser() {
+            const id = parseInt(document.getElementById('update-id').value.trim());
+            const username = document.getElementById('update-username').value.trim();
+            const name = document.getElementById('update-name').value.trim();
+            const password = document.getElementById('update-password').value.trim();
+            const resultArea = document.getElementById('update-result');
+
+            if (!id || !username || !name || !password) {
+                showMessage(resultArea, 'Todos os campos são obrigatórios!', 'error');
+                return;
+            }
+
+            const updatedUser = { id, username, name, password };
+
+            fetch(`http://localhost:8080/user/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedUser)
+            })
+            .then(response => {
+                if (response.ok) {
+                    showMessage(resultArea, 'Usuário atualizado com sucesso!', 'success');
+                } else if (response.status === 409) {
+                    showMessage(resultArea, 'Username já existe em outro usuário!', 'error');
+                } else if (response.status === 404) {
+                    showMessage(resultArea, 'Usuário não encontrado!', 'error');
+                } else {
+                    throw new Error('Erro ao atualizar usuário.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showMessage(resultArea, 'Erro ao atualizar usuário.', 'error');
+            });
+        }
+
+        function clearUpdateForm() {
+            document.getElementById('update-id').value = '';
+            document.getElementById('update-username').value = '';
+            document.getElementById('update-name').value = '';
+            document.getElementById('update-password').value = '';
+            document.getElementById('update-result').innerHTML = '';
+        }
+
+        // DELETE - Excluir usuário
+        function deleteUser() {
+            const id = parseInt(document.getElementById('delete-id').value.trim());
+            const resultArea = document.getElementById('delete-result');
+
+            if (!id) {
+                showMessage(resultArea, 'Digite um ID válido!', 'error');
+                return;
+            }
+
+            fetch(`http://localhost:8080/user/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    showMessage(resultArea, `Usuário com ID ${id} excluído com sucesso!`, 'success');
+                    clearDeleteForm();
+                } else if (response.status === 404) {
+                    showMessage(resultArea, 'Usuário não encontrado!', 'error');
+                } else {
+                    throw new Error('Erro ao excluir usuário.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showMessage(resultArea, 'Erro ao excluir usuário.', 'error');
+            });
+        }
+
+        function clearDeleteForm() {
+            document.getElementById('delete-id').value = '';
+            document.getElementById('delete-result').innerHTML = '';
+        }
+
+        // Função auxiliar para mostrar mensagens
+        function showMessage(container, message, type) {
+            container.innerHTML = `<div class="message ${type}">${message}</div>`;
+        }
+    </script>
+</body>
+</html>

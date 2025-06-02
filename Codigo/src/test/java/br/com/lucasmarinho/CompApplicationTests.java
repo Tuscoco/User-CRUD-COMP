@@ -23,7 +23,7 @@ class CompApplicationTests {
 	@Test
 	public void createUserTest(){
 
-		User user = new User("Teste", "Teste", "Teste");
+		User user = new User("TesteCREATE", "Teste", "Teste");
 
 		ResponseEntity<String> response = restTemplate.postForEntity("/user/", user, String.class);
 
@@ -40,7 +40,7 @@ class CompApplicationTests {
 	@Test
 	public void readUserTest(){
 		
-		User user = new User("Teste", "Teste", "Teste");
+		User user = new User("TesteREAD", "Teste", "Teste");
 		restTemplate.postForEntity("/user/", user, String.class);
 
 		ResponseEntity<User> response = restTemplate.getForEntity("/user/" + 0, User.class); //Id existe
@@ -54,10 +54,10 @@ class CompApplicationTests {
 	@Test
 	public void readUserByUsernameTest(){
 		
-		User user = new User("Teste", "Teste", "Teste");
+		User user = new User("TesteREADBYUSERNAME", "Teste", "Teste");
 		restTemplate.postForEntity("/user/", user, String.class);
 
-		ResponseEntity<User> response = restTemplate.getForEntity("/user/username/Teste", User.class); //Username existe
+		ResponseEntity<User> response = restTemplate.getForEntity("/user/username/TesteREADBYUSERNAME", User.class); //Username existe
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
 		response = restTemplate.getForEntity("/user/username/Teste2", User.class); //Username não existe
@@ -68,20 +68,20 @@ class CompApplicationTests {
 	@Test
 	public void updateUserTest(){
 
-		User user = new User("Teste", "Teste", "Teste");
+		User user = new User("TesteUPDATE", "Teste", "Teste");
 		restTemplate.postForEntity("/user/", user, String.class);
 
-		restTemplate.put("/user/0", new User("TesteUpdate", "TesteUpdate", "TesteUpdate"));
+		restTemplate.put("/user/0", new User("TesteUpdate2", "TesteUpdate", "TesteUpdate"));
 
 		ResponseEntity<User> response = restTemplate.getForEntity("/user/0", User.class);
-		assertEquals("TesteUpdate", response.getBody().getUsername());
+		assertEquals("TesteUpdate2", response.getBody().getUsername());
 
 	}
 
 	@Test
 	public void deleteUserTest(){
 
-		User user = new User("Teste", "Teste", "Teste");
+		User user = new User("TesteDELETE", "Teste", "Teste");
 		restTemplate.postForEntity("/user/", user, String.class);
 
 		restTemplate.delete("/user/1");
