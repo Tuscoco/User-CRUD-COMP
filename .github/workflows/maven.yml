@@ -20,5 +20,8 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
+    - name: Change Directory
+      run: cd Codigo/
+
     - name: Build and Test with Maven
       run: mvn -B verify
