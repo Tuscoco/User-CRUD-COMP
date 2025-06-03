@@ -25,3 +25,4 @@ jobs:
 
     - name: Build and Test with Maven
       run: mvn -B verify
+      working-directory: ./Codigo
