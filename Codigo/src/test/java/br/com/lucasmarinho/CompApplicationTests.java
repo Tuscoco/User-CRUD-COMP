@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -12,8 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.lucasmarinho.model.User;
+import jakarta.transaction.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@Transactional
 @ActiveProfiles("dev")
 class CompApplicationTests {
 
@@ -25,15 +29,15 @@ class CompApplicationTests {
 
 		User user = new User("TesteCREATE", "Teste", "Teste");
 
-		ResponseEntity<String> response = restTemplate.postForEntity("/user/", user, String.class);
+		ResponseEntity<User> response = restTemplate.postForEntity("/user/", user, User.class);
 
+		assertEquals(user.getUsername(), response.getBody().getUsername());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals("Usuário criado com sucesso!", response.getBody());
 
-		response = restTemplate.postForEntity("/user/", user, String.class);
+		response = restTemplate.postForEntity("/user/", user, User.class);
 
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertEquals("Erro ao criar usuário!\nUsername existente!", response.getBody());
+		assertEquals(null, response.getBody());
 
 	}
 
@@ -41,12 +45,12 @@ class CompApplicationTests {
 	public void readUserTest(){
 		
 		User user = new User("TesteREAD", "Teste", "Teste");
-		restTemplate.postForEntity("/user/", user, String.class);
+		ResponseEntity<User> criado = restTemplate.postForEntity("/user/", user, User.class);
 
-		ResponseEntity<User> response = restTemplate.getForEntity("/user/" + 0, User.class); //Id existe
+		ResponseEntity<User> response = restTemplate.getForEntity("/user/" + criado.getBody().getId(), User.class); //Id existe
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
-		response = restTemplate.getForEntity("/user/" + 10, User.class); //Id não existe
+		response = restTemplate.getForEntity("/user/" + 9999, User.class); //Id não existe
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
 	}
@@ -69,11 +73,11 @@ class CompApplicationTests {
 	public void updateUserTest(){
 
 		User user = new User("TesteUPDATE", "Teste", "Teste");
-		restTemplate.postForEntity("/user/", user, String.class);
+		ResponseEntity<User> criado = restTemplate.postForEntity("/user/", user, User.class);
 
-		restTemplate.put("/user/0", new User("TesteUpdate2", "TesteUpdate", "TesteUpdate"));
+		restTemplate.put("/user/" + criado.getBody().getId(), new User("TesteUpdate2", "TesteUpdate", "TesteUpdate"));
 
-		ResponseEntity<User> response = restTemplate.getForEntity("/user/0", User.class);
+		ResponseEntity<User> response = restTemplate.getForEntity("/user/" + criado.getBody().getId(), User.class);
 		assertEquals("TesteUpdate2", response.getBody().getUsername());
 
 	}

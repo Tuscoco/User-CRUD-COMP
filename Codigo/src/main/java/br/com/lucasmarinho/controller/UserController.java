@@ -26,17 +26,17 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> criarUsuario(@RequestBody User user){
+    public ResponseEntity<User> criarUsuario(@RequestBody User user){
 
-        boolean success = service.criarUsuario(user);
+        User criado = service.criarUsuario(user);
 
-        if(success){
+        if(criado != null){
 
-            return ResponseEntity.ok().body("Usuário criado com sucesso!");
+            return ResponseEntity.ok().body(criado);
 
         }
 
-        return ResponseEntity.badRequest().body("Erro ao criar usuário!\nUsername existente!");
+        return ResponseEntity.badRequest().build();
 
     }
 
@@ -51,7 +51,7 @@ public class UserController {
 
         }
 
-        return ResponseEntity.badRequest().body(null);
+        return ResponseEntity.badRequest().build();
 
     }
 
@@ -66,7 +66,7 @@ public class UserController {
 
         }
 
-        return ResponseEntity.badRequest().body(null);
+        return ResponseEntity.badRequest().build();
 
     }
 

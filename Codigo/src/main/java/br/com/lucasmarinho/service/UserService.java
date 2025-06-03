@@ -19,13 +19,13 @@ public class UserService {
         
     }
 
-    public boolean criarUsuario(User user){
+    public User criarUsuario(User user){
 
         User verificarExistencia = repository.findByUsername(user.getUsername());
 
         if(verificarExistencia != null){
 
-            return false;
+            return null;
 
         }
 
@@ -33,9 +33,7 @@ public class UserService {
 
         user.setPassword(senhaCriptografada);
 
-        repository.save(user);
-
-        return true;
+        return repository.save(user);
 
     }
 
