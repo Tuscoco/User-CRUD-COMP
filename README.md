@@ -1,9 +1,9 @@
 # User CRUD COMP
----
+
 **Um pequeno exercício de treinamento para iniciação na COMP - Empresa Júnior.**
 
 ## Funcionalidades
----
+
 A aplicação possui algumas funcionalidades principais, no caso, funcionalidades de CRUD.
 
 - **Create:** Funcionalidade para criar um usuário e adicioná-lo no banco de dados.
