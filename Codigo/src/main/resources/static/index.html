@@ -198,8 +198,8 @@
                 <button class="btn btn-primary" onclick="readUserById()" style="margin-top: 5px;">Buscar por ID</button>
             </div>
             <div class="form-group">
-                <label for="read-name">Pesquisar por Nome:</label>
-                <input type="text" id="read-name" placeholder="Digite o nome do usuário">
+                <label for="read-name">Pesquisar por Username:</label>
+                <input type="text" id="read-name" placeholder="Digite o username do usuário">
                 <button class="btn btn-primary" onclick="readUserByName()" style="margin-top: 5px;">Buscar por Nome</button>
             </div>
             <div class="form-group">
@@ -312,7 +312,7 @@
             .then(user => {
                 displayUsers(user, resultArea);
             })
-            .catch(error => console.error('Erro:', error));
+            .catch(error => showMessage(resultArea, 'Usuário não encontrado!', 'error'));
             
         }
 
@@ -330,7 +330,7 @@
             .then(user => {
                 displayUsers(user, resultArea);
             })
-            .catch(error => console.error('Erro:', error));
+            .catch(error => showMessage(resultArea, 'Usuário não encontrado!', 'error'));
 
         }
 

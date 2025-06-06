@@ -55,8 +55,8 @@ public class UserController {
 
     }
 
-    @GetMapping("/username/{user}")
-    public ResponseEntity<User> lerUsuario(@PathVariable("user") String username){
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> lerUsuario(@PathVariable("username") String username){
 
         User user = service.lerUsuario(username);
 
