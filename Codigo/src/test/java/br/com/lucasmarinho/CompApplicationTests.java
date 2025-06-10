@@ -61,10 +61,10 @@ class CompApplicationTests {
 		User user = new User("TesteREADBYUSERNAME", "Teste", "Teste");
 		restTemplate.postForEntity("/user/", user, String.class);
 
-		ResponseEntity<User> response = restTemplate.getForEntity("/user/username/TesteREADBYUSERNAME", User.class); //Username existe
+		ResponseEntity<User> response = restTemplate.getForEntity("/user/?username=" + user.getUsername(), User.class); //Username existe
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
-		response = restTemplate.getForEntity("/user/username/Teste2", User.class); //Username não existe
+		response = restTemplate.getForEntity("/user/?username=Teste2", User.class); //Username não existe
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
 	}
