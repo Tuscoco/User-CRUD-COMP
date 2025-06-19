@@ -1,0 +1,37 @@
+# Arquivos de build
+*.jar
+*.war
+*.ear
+target/
+build/
+out/
+
+# Arquivos de configuração da IDE
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.DS_Store
+Thumbs.db
+
+# Arquivos de log
+*.log
+logs/
+
+# Arquivos mark down
+*.md
+
+# Arquivos Git
+.gitignore
+
+# Arquivos de ambiente
+.env
+
+# Arquivos temporários
+*.tmp
+*.swp
+*~
