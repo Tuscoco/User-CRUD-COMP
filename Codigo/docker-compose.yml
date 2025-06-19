@@ -1,0 +1,6 @@
+services:
+  aplicacao:
+    image: lucasfernandesmarinho/user-crud-comp:1.0
+    ports:
+      - "8080:8080"
+    restart: always
